@@ -416,7 +416,8 @@ function renderTimelineChart(data) {
           backgroundColor: 'rgba(59,130,246,0.5)',
           borderColor: 'rgba(59,130,246,0.8)',
           borderWidth: 1,
-          order: 2
+          order: 2,
+          yAxisID: 'y'
         },
         {
           label: 'Fatal + Severe',
@@ -425,11 +426,12 @@ function renderTimelineChart(data) {
           borderColor: '#ef4444',
           backgroundColor: 'rgba(239,68,68,0.1)',
           borderWidth: 2,
-          pointRadius: 1.5,
-          pointHoverRadius: 4,
+          pointRadius: 2,
+          pointHoverRadius: 5,
           fill: true,
           tension: 0.3,
-          order: 1
+          order: 1,
+          yAxisID: 'y1'
         }
       ]
     },
@@ -443,7 +445,20 @@ function renderTimelineChart(data) {
       },
       scales: {
         x: { grid: { display: false }, ticks: { maxRotation: 45, autoSkip: true, maxTicksLimit: 20 } },
-        y: { beginAtZero: true, title: { display: true, text: 'Count' } }
+        y: {
+          position: 'left',
+          beginAtZero: true,
+          title: { display: true, text: 'Total Crashes', color: 'rgba(59,130,246,0.9)' },
+          ticks: { color: 'rgba(59,130,246,0.8)' },
+          grid: { color: 'rgba(59,130,246,0.08)' }
+        },
+        y1: {
+          position: 'right',
+          beginAtZero: true,
+          title: { display: true, text: 'Fatal + Severe', color: 'rgba(239,68,68,0.9)' },
+          ticks: { color: 'rgba(239,68,68,0.8)' },
+          grid: { drawOnChartArea: false }
+        }
       }
     },
     plugins: [{
