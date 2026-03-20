@@ -375,11 +375,12 @@ function renderTimelineChart(data) {
 
   // Annotation positions
   const interventions = [
+    { year: '1983', label: 'CCA Traffic Study', color: '#a855f7' },
     { year: '1988', label: 'Medians Installed', color: '#22c55e' },
     { year: '2000', label: 'Policy 5-6', color: '#3b82f6' },
     { year: '2015', label: 'Vision Zero', color: '#8b5cf6' },
     { year: '2018', label: 'Better Bikeways', color: '#06b6d4' },
-    { year: '2022', label: 'Record Deaths', color: '#ef4444' }
+    { year: '2023', label: '10th/11th Bikeway', color: '#f59e0b' }
   ];
 
   const annotationLines = {};
