@@ -86,6 +86,20 @@ Chart.defaults.color = '#94a3b8';
 Chart.defaults.borderColor = 'rgba(255,255,255,0.06)';
 Chart.defaults.font.family = "'Inter', system-ui, sans-serif";
 
+// ---------- Point-in-Polygon (ray casting) ----------
+function pointInPolygon(lng, lat, polygon) {
+  let inside = false;
+  for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+    const xi = polygon[i][0], yi = polygon[i][1];
+    const xj = polygon[j][0], yj = polygon[j][1];
+    if ((yi > lat) !== (yj > lat) &&
+        lng < (xj - xi) * (lat - yi) / (yj - yi) + xi) {
+      inside = !inside;
+    }
+  }
+  return inside;
+}
+
 // ---------- API Service ----------
 function buildSpatialFilter() {
   return JSON.stringify({
@@ -140,7 +154,13 @@ async function fetchCrashPoints(yearStart, yearEnd) {
     if (!data.exceededTransferLimit) break;
     offset += batchSize;
   }
-  return allFeatures;
+  // Client-side filter: only keep points inside the Naglee Park polygon
+  return allFeatures.filter(f => {
+    const a = f.attributes;
+    const lat = a.LATITUDE || (f.geometry && f.geometry.y);
+    const lng = a.LONGITUDE || (f.geometry && f.geometry.x);
+    return lat && lng && pointInPolygon(lng, lat, NAGLEE_PARK_BOUNDARY);
+  });
 }
 
 // ---------- Map Module ----------
