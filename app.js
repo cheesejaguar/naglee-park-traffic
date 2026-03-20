@@ -105,8 +105,9 @@ async function queryAPI(params) {
     outSR: 4326
   };
   const merged = { ...defaults, ...params };
-  Object.entries(merged).forEach(([k, v]) => url.searchParams.set(k, v));
-  const resp = await fetch(url);
+  const body = new URLSearchParams();
+  Object.entries(merged).forEach(([k, v]) => body.set(k, v));
+  const resp = await fetch(url, { method: 'POST', body });
   if (!resp.ok) throw new Error(`API error: ${resp.status}`);
   return resp.json();
 }
