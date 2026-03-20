@@ -6,7 +6,7 @@
 const API_BASE = 'https://geo.sanjoseca.gov/server/rest/services/OPN/OPN_OpenDataService/MapServer';
 const CRASH_LAYER = 512;
 const MAP_CENTER = [37.3367, -121.8733];
-const BBOX = { xmin: -121.89, ymin: 37.328, xmax: -121.866, ymax: 37.344 };
+// Bounding box kept only as a broad pre-filter; actual filtering uses polygon below
 const SEVERITY_COLORS = {
   fatal: '#ef4444',
   severe: '#f97316',
@@ -89,8 +89,7 @@ Chart.defaults.font.family = "'Inter', system-ui, sans-serif";
 // ---------- API Service ----------
 function buildSpatialFilter() {
   return JSON.stringify({
-    xmin: BBOX.xmin, ymin: BBOX.ymin,
-    xmax: BBOX.xmax, ymax: BBOX.ymax,
+    rings: [NAGLEE_PARK_BOUNDARY],
     spatialReference: { wkid: 4326 }
   });
 }
@@ -99,7 +98,7 @@ async function queryAPI(params) {
   const url = new URL(`${API_BASE}/${CRASH_LAYER}/query`);
   const defaults = {
     f: 'json',
-    geometryType: 'esriGeometryEnvelope',
+    geometryType: 'esriGeometryPolygon',
     spatialRel: 'esriSpatialRelIntersects',
     geometry: buildSpatialFilter(),
     inSR: 4326,
